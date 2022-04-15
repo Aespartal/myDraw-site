@@ -1,0 +1,38 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="likeAlbum">
+            <h2><span>Like Album</span> {{ likeAlbum.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span>Extended User</span></dt>
+                <dd>
+                    <div *ngIf="likeAlbum.extendedUserId">
+                        <a [routerLink]="['/extended-user', likeAlbum.extendedUserId, 'view']">{{ likeAlbum.extendedUserId }}</a>
+                    </div>
+                </dd>
+                <dt><span>Album</span></dt>
+                <dd>
+                    <div *ngIf="likeAlbum.albumId">
+                        <a [routerLink]="['/album', likeAlbum.albumId, 'view']">{{ likeAlbum.albumId }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/like-album', likeAlbum.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

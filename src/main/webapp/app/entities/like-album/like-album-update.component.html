@@ -1,0 +1,54 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-like-album-heading">Create or edit a Like Album</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_extendedUser">Extended User</label>
+                    <select class="form-control" id="field_extendedUser" name="extendedUser" formControlName="extendedUserId">
+                        <option *ngIf="!editForm.get('extendedUserId')!.value" [ngValue]="null" selected></option>
+                        <option [ngValue]="extendedUserOption.id" *ngFor="let extendedUserOption of extendedusers; trackBy: trackById">{{ extendedUserOption.id }}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('extendedUserId')!.invalid && (editForm.get('extendedUserId')!.dirty || editForm.get('extendedUserId')!.touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('extendedUserId')?.errors?.required">
+                        This field is required.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_album">Album</label>
+                    <select class="form-control" id="field_album" name="album" formControlName="albumId">
+                        <option *ngIf="!editForm.get('albumId')!.value" [ngValue]="null" selected></option>
+                        <option [ngValue]="albumOption.id" *ngFor="let albumOption of albums; trackBy: trackById">{{ albumOption.id }}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('albumId')!.invalid && (editForm.get('albumId')!.dirty || editForm.get('albumId')!.touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('albumId')?.errors?.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+<div>
+    <h2 id="page-heading">
+        <span>Extended Users</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-extended-user" [routerLink]="['/extended-user/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span>
+            Create a new Extended User
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="extendedUsers?.length === 0">
+        <span>No extendedUsers found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="extendedUsers && extendedUsers.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+                    <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="telephone"><span>Telephone</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="birthdate"><span>Birthdate</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="description"><span>Description</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="imageCover"><span>Image Cover</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="gender"><span>Gender</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="userId"><span>User</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="backgroundColorId"><span>Background Color</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let extendedUser of extendedUsers ;trackBy: trackId">
+                    <td><a [routerLink]="['/extended-user', extendedUser.id, 'view']">{{ extendedUser.id }}</a></td>
+                    <td>{{ extendedUser.telephone }}</td>
+                    <td>{{ extendedUser.birthdate | date:'mediumDate' }}</td>
+                    <td>{{ extendedUser.description }}</td>
+                    <td>
+                        <a *ngIf="extendedUser.imageCover" (click)="openFile(extendedUser.imageCoverContentType, extendedUser.imageCover)">
+                            <img [src]="'data:' + extendedUser.imageCoverContentType + ';base64,' + extendedUser.imageCover" style="max-height: 30px;" alt="extendedUser image"/>
+                        </a>
+                        <span *ngIf="extendedUser.imageCover">{{ extendedUser.imageCoverContentType }}, {{ byteSize(extendedUser.imageCover) }}</span>
+                    </td>
+                    <td>{{ extendedUser.gender }}</td>
+                    <td>
+                        {{ extendedUser.userId }}
+                    </td>
+                    <td>
+                        <div *ngIf="extendedUser.backgroundColorId">
+                            <a [routerLink]="['/background-color', extendedUser.backgroundColorId , 'view']" >{{ extendedUser.backgroundColorId }}</a>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/extended-user', extendedUser.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/extended-user', extendedUser.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(extendedUser)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="extendedUsers && extendedUsers.length > 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+        </div>
+    </div>
+</div>

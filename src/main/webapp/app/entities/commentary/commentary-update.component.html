@@ -1,0 +1,96 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-commentary-heading">Create or edit a Commentary</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_description">Description</label>
+                    <input type="text" class="form-control" name="description" id="field_description"
+                           formControlName="description"/>
+                    <div *ngIf="editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('description')?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_dateCreated">Date Created</label>
+                    <div class="d-flex">
+                        <input id="field_dateCreated" type="datetime-local" class="form-control" name="dateCreated" formControlName="dateCreated" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                    <div *ngIf="editForm.get('dateCreated')!.invalid && (editForm.get('dateCreated')!.dirty || editForm.get('dateCreated')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('dateCreated')?.errors?.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('dateCreated')?.errors?.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_dateModified">Date Modified</label>
+                    <div class="d-flex">
+                        <input id="field_dateModified" type="datetime-local" class="form-control" name="dateModified" formControlName="dateModified" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_isModified">Is Modified</label>
+                    <input type="checkbox" class="form-control" name="isModified" id="field_isModified"
+                           formControlName="isModified"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_extendedUser">Extended User</label>
+                    <select class="form-control" id="field_extendedUser" name="extendedUser" formControlName="extendedUserId">
+                        <option *ngIf="!editForm.get('extendedUserId')!.value" [ngValue]="null" selected></option>
+                        <option [ngValue]="extendedUserOption.id" *ngFor="let extendedUserOption of extendedusers; trackBy: trackById">{{ extendedUserOption.id }}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('extendedUserId')!.invalid && (editForm.get('extendedUserId')!.dirty || editForm.get('extendedUserId')!.touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('extendedUserId')?.errors?.required">
+                        This field is required.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_album">Album</label>
+                    <select class="form-control" id="field_album" name="album" formControlName="albumId">
+                        <option *ngIf="!editForm.get('albumId')!.value" [ngValue]="null" selected></option>
+                        <option [ngValue]="albumOption.id" *ngFor="let albumOption of albums; trackBy: trackById">{{ albumOption.id }}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('albumId')!.invalid && (editForm.get('albumId')!.dirty || editForm.get('albumId')!.touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('albumId')?.errors?.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="extendedUser">
+            <h2><span>Extended User</span> {{ extendedUser.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span>Telephone</span></dt>
+                <dd>
+                    <span>{{ extendedUser.telephone }}</span>
+                </dd>
+                <dt><span>Birthdate</span></dt>
+                <dd>
+                    <span>{{ extendedUser.birthdate }}</span>
+                </dd>
+                <dt><span>Description</span></dt>
+                <dd>
+                    <span>{{ extendedUser.description }}</span>
+                </dd>
+                <dt><span>Image Cover</span></dt>
+                <dd>
+                    <div *ngIf="extendedUser.imageCover">
+                        <a (click)="openFile(extendedUser.imageCoverContentType, extendedUser.imageCover)">
+                            <img [src]="'data:' + extendedUser.imageCoverContentType + ';base64,' + extendedUser.imageCover" style="max-width: 100%;" alt="extendedUser image"/>
+                        </a>
+                        {{ extendedUser.imageCoverContentType }}, {{ byteSize(extendedUser.imageCover) }}
+                    </div>
+                </dd>
+                <dt><span>Gender</span></dt>
+                <dd>
+                    <span>{{ extendedUser.gender }}</span>
+                </dd>
+                <dt><span>User</span></dt>
+                <dd>
+                    {{ extendedUser.userId }}
+                </dd>
+                <dt><span>Background Color</span></dt>
+                <dd>
+                    <div *ngIf="extendedUser.backgroundColorId">
+                        <a [routerLink]="['/background-color', extendedUser.backgroundColorId, 'view']">{{ extendedUser.backgroundColorId }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/extended-user', extendedUser.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
