@@ -1,6 +1,7 @@
 import { Moment } from 'moment';
 import { IAlbum } from 'app/shared/model/album.model';
 import { Gender } from 'app/shared/model/enumerations/gender.model';
+import { IUser } from 'app/core/user/user.model';
 
 export interface IExtendedUser {
   id?: number;
@@ -13,6 +14,7 @@ export interface IExtendedUser {
   userId?: number;
   albums?: IAlbum[];
   backgroundColorId?: number;
+  user?: IUser;
 }
 
 export class ExtendedUser implements IExtendedUser {
@@ -26,6 +28,7 @@ export class ExtendedUser implements IExtendedUser {
     public gender?: Gender,
     public userId?: number,
     public albums?: IAlbum[],
-    public backgroundColorId?: number
+    public backgroundColorId?: number,
+    public user?: IUser
   ) {}
 }

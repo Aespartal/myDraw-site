@@ -9,7 +9,7 @@ import { JhiDataUtils, JhiFileLoadError, JhiEventManager, JhiEventWithContent } 
 import { IExtendedUser, ExtendedUser } from 'app/shared/model/extended-user.model';
 import { ExtendedUserService } from './extended-user.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
-import { IUser } from 'app/core/user/user.model';
+import { IUser, User } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
 import { IBackgroundColor } from 'app/shared/model/background-color.model';
 import { BackgroundColorService } from 'app/entities/background-color/background-color.service';
@@ -22,20 +22,21 @@ type SelectableEntity = IUser | IBackgroundColor;
 })
 export class ExtendedUserUpdateComponent implements OnInit {
   isSaving = false;
-  users: IUser[] = [];
   backgroundcolors: IBackgroundColor[] = [];
   birthdateDp: any;
+  authorities: string[] = [];
 
   editForm = this.fb.group({
     id: [],
-    telephone: [],
     birthdate: [null, [Validators.required]],
     description: [null, [Validators.maxLength(3500)]],
     imageCover: [],
     imageCoverContentType: [],
     gender: [null, [Validators.required]],
-    userId: [],
-    backgroundColorId: [null, Validators.required],
+    firstName: [null],
+    lastName: [null],
+    email: ['', [Validators.minLength(5), Validators.maxLength(254), Validators.email]],
+    authorities: [null, [Validators.required]],
   });
 
   constructor(
@@ -52,24 +53,24 @@ export class ExtendedUserUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ extendedUser }) => {
       this.updateForm(extendedUser);
-
-      this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
-
-      this.backgroundColorService.query().subscribe((res: HttpResponse<IBackgroundColor[]>) => (this.backgroundcolors = res.body || []));
+    });
+    this.userService.authorities().subscribe(authorities => {
+      this.authorities = authorities;
     });
   }
 
   updateForm(extendedUser: IExtendedUser): void {
     this.editForm.patchValue({
       id: extendedUser.id,
-      telephone: extendedUser.telephone,
       birthdate: extendedUser.birthdate,
       description: extendedUser.description,
       imageCover: extendedUser.imageCover,
       imageCoverContentType: extendedUser.imageCoverContentType,
       gender: extendedUser.gender,
-      userId: extendedUser.userId,
-      backgroundColorId: extendedUser.backgroundColorId,
+      firstName: extendedUser.user?.firstName,
+      lastName: extendedUser.user?.lastName,
+      email: extendedUser.user?.email,
+      authorities: extendedUser.user?.authorities,
     });
   }
 
@@ -117,14 +118,20 @@ export class ExtendedUserUpdateComponent implements OnInit {
     return {
       ...new ExtendedUser(),
       id: this.editForm.get(['id'])!.value,
-      telephone: this.editForm.get(['telephone'])!.value,
       birthdate: this.editForm.get(['birthdate'])!.value,
       description: this.editForm.get(['description'])!.value,
       imageCoverContentType: this.editForm.get(['imageCoverContentType'])!.value,
       imageCover: this.editForm.get(['imageCover'])!.value,
       gender: this.editForm.get(['gender'])!.value,
-      userId: this.editForm.get(['userId'])!.value,
-      backgroundColorId: this.editForm.get(['backgroundColorId'])!.value,
+      user: {
+        ...new User(),
+        id: this.editForm.get(['id'])!.value,
+        firstName: this.editForm.get(['firstName'])!.value,
+        lastName: this.editForm.get(['lastName'])!.value,
+        authorities: this.editForm.get(['authorities'])!.value,
+        login: this.editForm.get(['email'])!.value,
+        email: this.editForm.get(['email'])!.value,
+      },
     };
   }
 

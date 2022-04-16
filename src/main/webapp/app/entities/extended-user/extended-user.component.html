@@ -5,7 +5,7 @@
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-extended-user" [routerLink]="['/extended-user/new']">
             <fa-icon icon="plus"></fa-icon>
             <span>
-            Create a new Extended User
+            Crear un nuevo usuario
             </span>
         </button>
     </h2>
@@ -15,7 +15,7 @@
     <jhi-alert></jhi-alert>
 
     <div class="alert alert-warning" id="no-result" *ngIf="extendedUsers?.length === 0">
-        <span>No extendedUsers found</span>
+        <span>Usuarios no encontrados</span>
     </div>
 
     <div class="table-responsive" id="entities" *ngIf="extendedUsers && extendedUsers.length > 0">
@@ -23,35 +23,24 @@
             <thead>
                 <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
                     <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="telephone"><span>Telephone</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="birthdate"><span>Birthdate</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="description"><span>Description</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="imageCover"><span>Image Cover</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="gender"><span>Gender</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="userId"><span>User</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="backgroundColorId"><span>Background Color</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="userId"><span>Login</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="birthdate"><span>Fecha de nacimiento</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="gender"><span>Genero</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"><span>Roles</span></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let extendedUser of extendedUsers ;trackBy: trackId">
                     <td><a [routerLink]="['/extended-user', extendedUser.id, 'view']">{{ extendedUser.id }}</a></td>
-                    <td>{{ extendedUser.telephone }}</td>
-                    <td>{{ extendedUser.birthdate | date:'mediumDate' }}</td>
-                    <td>{{ extendedUser.description }}</td>
                     <td>
-                        <a *ngIf="extendedUser.imageCover" (click)="openFile(extendedUser.imageCoverContentType, extendedUser.imageCover)">
-                            <img [src]="'data:' + extendedUser.imageCoverContentType + ';base64,' + extendedUser.imageCover" style="max-height: 30px;" alt="extendedUser image"/>
-                        </a>
-                        <span *ngIf="extendedUser.imageCover">{{ extendedUser.imageCoverContentType }}, {{ byteSize(extendedUser.imageCover) }}</span>
+                        {{ extendedUser.user?.login }}
                     </td>
+                    <td>{{ extendedUser.birthdate | date:'mediumDate' }}</td>
                     <td>{{ extendedUser.gender }}</td>
                     <td>
-                        {{ extendedUser.userId }}
-                    </td>
-                    <td>
-                        <div *ngIf="extendedUser.backgroundColorId">
-                            <a [routerLink]="['/background-color', extendedUser.backgroundColorId , 'view']" >{{ extendedUser.backgroundColorId }}</a>
+                        <div *ngFor="let authority of extendedUser.user?.authorities">
+                            <span class="badge badge-info">{{ authority }}</span>
                         </div>
                     </td>
                     <td class="text-right">
